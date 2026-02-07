@@ -1,0 +1,20 @@
+# Cordova
+platforms/
+plugins/
+hooks/
+
+# Build artifacts
+build/
+dist/
+*.ipa
+*.apk
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo

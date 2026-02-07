@@ -3,8 +3,8 @@ set -e
 #!/bin/bash
 
 # 设置环境变量 2月7日NCE光使用，勿动
-export ANTHROPIC_AUTH_TOKEN=sk-OTpmRgI7jPLkYXuY4f6064280641421bB8E58bAb0dB959Ba
-export ANTHROPIC_BASE_URL=https://new.aicode.us.com
+export ANTHROPIC_AUTH_TOKEN=f8369a3eeda548208c3dc25e2b05b699.51TR8O8dYFteeTgX
+export ANTHROPIC_BASE_URL=https://open.bigmodel.cn/api/anthropic
 export CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS=1
 # 备选API线路（去掉下面两行注释生效）
 # export ANTHROPIC_AUTH_TOKEN=sk-BnACKGNS5fruSd9Mmm2cH4MuLXGR27sB0md9KsYN6fvR4CYi

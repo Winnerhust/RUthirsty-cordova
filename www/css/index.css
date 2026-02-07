@@ -1,0 +1,809 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --glass-bg: rgba(255, 255, 255, 0.15);
+    --glass-border: rgba(255, 255, 255, 0.25);
+    --glass-shadow: rgba(0, 0, 0, 0.1);
+    --primary-gradient: linear-gradient(135deg, #00c6fb 0%, #005bea 100%);
+    --accent-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --text-primary: rgba(255, 255, 255, 0.95);
+    --text-secondary: rgba(255, 255, 255, 0.7);
+    --glow: rgba(255, 255, 255, 0.3);
+}
+
+body {
+    font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+    min-height: 100vh;
+    color: var(--text-primary);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    position: relative;
+}
+
+/* Water Level Container */
+.water-level-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.water {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 0;
+    background: linear-gradient(
+        180deg,
+        rgba(0, 198, 251, 0.4) 0%,
+        rgba(0, 91, 234, 0.5) 100%
+    );
+    transition: height 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.water::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    background: linear-gradient(
+        180deg,
+        rgba(0, 198, 251, 0.3) 0%,
+        transparent 30%
+    );
+}
+
+.wave {
+    position: absolute;
+    width: 200%;
+    height: 100%;
+    background-repeat: repeat-x;
+    background-size: 50% 100%;
+    animation: wave-animation linear infinite;
+}
+
+.wave1 {
+    opacity: 0.3;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 200' preserveAspectRatio='none'%3E%3Cpath d='M0,100 Q200,150 400,100 T800,100 V200 H0 Z' fill='rgba(0,198,251,0.5)'/%3E%3C/svg%3E");
+    bottom: 0;
+    animation-duration: 8s;
+}
+
+.wave2 {
+    opacity: 0.4;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 200' preserveAspectRatio='none'%3E%3Cpath d='M0,100 Q200,50 400,100 T800,100 V200 H0 Z' fill='rgba(0,198,251,0.5)'/%3E%3C/svg%3E");
+    bottom: 10px;
+    animation-duration: 6s;
+    animation-direction: reverse;
+}
+
+.wave3 {
+    opacity: 0.5;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 200' preserveAspectRatio='none'%3E%3Cpath d='M0,100 Q200,150 400,100 T800,100 V200 H0 Z' fill='rgba(0,91,234,0.6)'/%3E%3C/svg%3E");
+    bottom: 20px;
+    animation-duration: 10s;
+}
+
+.wave4 {
+    opacity: 0.3;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 200' preserveAspectRatio='none'%3E%3Cpath d='M0,100 Q200,50 400,100 T800,100 V200 H0 Z' fill='rgba(102,126,234,0.4)'/%3E%3C/svg%3E");
+    bottom: 30px;
+    animation-duration: 7s;
+    animation-direction: reverse;
+}
+
+@keyframes wave-animation {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+/* Ambient background orbs */
+body::before {
+    content: '';
+    position: fixed;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(0, 198, 251, 0.3) 0%, transparent 70%);
+    border-radius: 50%;
+    top: -100px;
+    right: -100px;
+    z-index: 0;
+    animation: float 20s ease-in-out infinite;
+}
+
+body::after {
+    content: '';
+    position: fixed;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(102, 126, 234, 0.3) 0%, transparent 70%);
+    border-radius: 50%;
+    bottom: -50px;
+    left: -50px;
+    z-index: 0;
+    animation: float 25s ease-in-out infinite reverse;
+}
+
+@keyframes float {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(30px, -30px) scale(1.1); }
+    66% { transform: translate(-20px, 20px) scale(0.9); }
+}
+
+.app {
+    max-width: 500px;
+    margin: 0 auto;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    z-index: 1;
+}
+
+.header {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 25px 20px;
+    text-align: center;
+    box-shadow: 0 8px 32px var(--glass-shadow);
+    border-radius: 0 0 30px 30px;
+    margin: 0 15px;
+    margin-top: 15px;
+    position: relative;
+    overflow: hidden;
+}
+
+.header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        45deg,
+        transparent 30%,
+        rgba(255, 255, 255, 0.1) 50%,
+        transparent 70%
+    );
+    animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+    100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+}
+
+.header h1 {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 12px;
+    letter-spacing: 1px;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    position: relative;
+    z-index: 1;
+}
+
+.today-count {
+    font-size: 15px;
+    color: var(--text-secondary);
+    font-weight: 400;
+    letter-spacing: 0.5px;
+    position: relative;
+    z-index: 1;
+    margin-bottom: 8px;
+}
+
+.today-count span {
+    font-size: 32px;
+    font-weight: 700;
+    color: #fff;
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+    margin: 0 6px;
+    display: inline-block;
+}
+
+.water-progress {
+    font-size: 14px;
+    color: var(--text-secondary);
+    font-weight: 400;
+    letter-spacing: 0.5px;
+    position: relative;
+    z-index: 1;
+}
+
+.water-progress span {
+    font-size: 28px;
+    font-weight: 700;
+    color: #00c6fb;
+    text-shadow: 0 0 15px rgba(0, 198, 251, 0.5);
+    margin: 0 4px;
+    display: inline-block;
+}
+
+.main-content {
+    flex: 1;
+    padding: 25px 15px;
+}
+
+.order-section {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 18px 20px;
+    margin-bottom: 25px;
+    box-shadow:
+        0 8px 32px var(--glass-shadow),
+        0 0 50px rgba(0, 198, 251, 0.2);
+    position: relative;
+    overflow: hidden;
+    /* 默认使用等级0动画，会被updateFloatEffect动态覆盖 */
+    animation: float-gentle 4s ease-in-out infinite;
+}
+
+.order-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+}
+
+.order-badge {
+    font-size: 32px;
+    flex-shrink: 0;
+    filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.3));
+    animation: badge-pulse 2s ease-in-out infinite;
+}
+
+@keyframes badge-pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+.order-text {
+    flex: 1;
+    font-size: 15px;
+    color: var(--text-primary);
+    line-height: 1.5;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+}
+
+.order-text .order-number {
+    font-size: 18px;
+    font-weight: 700;
+    color: #00c6fb;
+    margin: 0 4px;
+}
+
+.tracker-container {
+    display: flex;
+    justify-content: center;
+    margin: 30px 0 40px 0;
+    position: relative;
+    z-index: 5;
+}
+
+.tracker-circle {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 2px solid var(--glass-border);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow:
+        0 8px 32px var(--glass-shadow),
+        0 0 60px rgba(0, 198, 251, 0.3),
+        0 0 100px rgba(0, 198, 251, 0.2),
+        inset 0 0 30px rgba(255, 255, 255, 0.1);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    position: relative;
+    overflow: hidden;
+    animation: float-in-water 2.5s ease-in-out infinite;
+}
+
+/* 水中涟漪效果 */
+.tracker-circle::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.3) 0%, transparent 60%);
+    border-radius: 50%;
+}
+
+/* 水波反光效果 */
+.tracker-circle::after {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    background: conic-gradient(
+        from 0deg,
+        transparent,
+        rgba(0, 198, 251, 0.6),
+        transparent,
+        rgba(102, 126, 234, 0.6),
+        transparent
+    );
+    border-radius: 50%;
+    z-index: -1;
+    animation: rotate 4s linear infinite;
+}
+
+/* 漂浮等级0：轻度漂浮 (0-3杯) */
+.tracker-circle.float-level-0,
+.order-section.float-level-0 {
+    animation-name: float-gentle;
+    animation-duration: 4s;
+}
+
+/* 漂浮等级1：中度漂浮 (4-7杯) */
+.tracker-circle.float-level-1,
+.order-section.float-level-1 {
+    animation-name: float-level1;
+    animation-duration: 3.5s;
+}
+
+/* 漂浮等级2：明显漂浮 (8-12杯) */
+.tracker-circle.float-level-2,
+.order-section.float-level-2 {
+    animation-name: float-level2;
+    animation-duration: 3s;
+}
+
+/* 漂浮等级3：强烈漂浮 (13-17杯) */
+.tracker-circle.float-level-3,
+.order-section.float-level-3 {
+    animation-name: float-level3;
+    animation-duration: 2.5s;
+}
+
+/* 漂浮等级4：超强漂浮 (18-20杯) */
+.tracker-circle.float-level-4,
+.order-section.float-level-4 {
+    animation-name: float-level4;
+    animation-duration: 2s;
+}
+
+/* 等级1动画：中度 */
+@keyframes float-level1 {
+    0%, 100% {
+        transform: translateY(0) rotate(-2deg);
+    }
+    50% {
+        transform: translateY(-10px) rotate(2deg);
+    }
+}
+
+/* 等级2动画：明显 */
+@keyframes float-level2 {
+    0%, 100% {
+        transform: translateY(0) rotate(-3deg);
+    }
+    25% {
+        transform: translateY(-14px) rotate(-1deg);
+    }
+    50% {
+        transform: translateY(-6px) rotate(3deg);
+    }
+    75% {
+        transform: translateY(-18px) rotate(1deg);
+    }
+}
+
+/* 等级3动画：强烈 */
+@keyframes float-level3 {
+    0%, 100% {
+        transform: translateY(0) rotate(-4deg);
+    }
+    25% {
+        transform: translateY(-18px) rotate(-2deg);
+    }
+    50% {
+        transform: translateY(-8px) rotate(4deg);
+    }
+    75% {
+        transform: translateY(-22px) rotate(2deg);
+    }
+}
+
+/* 等级4动画：超强 */
+@keyframes float-level4 {
+    0%, 100% {
+        transform: translateY(0) rotate(-5deg);
+    }
+    25% {
+        transform: translateY(-22px) rotate(-3deg);
+    }
+    50% {
+        transform: translateY(-10px) rotate(5deg);
+    }
+    75% {
+        transform: translateY(-28px) rotate(3deg);
+    }
+}
+
+/* 水中漂浮动画 - 默认等级 */
+@keyframes float-in-water {
+    0%, 100% {
+        transform: translateY(0) rotate(-3deg);
+    }
+    25% {
+        transform: translateY(-12px) rotate(-1deg);
+    }
+    50% {
+        transform: translateY(-4px) rotate(3deg);
+    }
+    75% {
+        transform: translateY(-15px) rotate(1deg);
+    }
+}
+
+/* 温和漂浮动画 - 用于喝水令 */
+@keyframes float-gentle {
+    0%, 100% {
+        transform: translateY(0) rotate(-1deg);
+    }
+    50% {
+        transform: translateY(-6px) rotate(1deg);
+    }
+}
+
+.tracker-circle::after {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    background: conic-gradient(
+        from 0deg,
+        transparent,
+        rgba(0, 198, 251, 0.5),
+        transparent,
+        rgba(102, 126, 234, 0.5),
+        transparent
+    );
+    border-radius: 50%;
+    z-index: -1;
+    animation: rotate 4s linear infinite;
+}
+
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.tracker-circle:active {
+    transform: scale(0.92) translateY(0);
+    box-shadow:
+        0 4px 20px var(--glass-shadow),
+        0 0 40px rgba(0, 198, 251, 0.4),
+        inset 0 0 40px rgba(255, 255, 255, 0.2);
+}
+
+/* 水中气泡装饰 - 增强版 */
+.tracker-container::before {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.3) 60%, transparent 100%);
+    border-radius: 50%;
+    bottom: -25px;
+    left: 25%;
+    animation: bubble-rise 3.5s ease-in-out infinite;
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+}
+
+.tracker-container::after {
+    content: '';
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.2) 60%, transparent 100%);
+    border-radius: 50%;
+    bottom: -30px;
+    right: 30%;
+    animation: bubble-rise 2.5s ease-in-out infinite;
+    animation-delay: 0.8s;
+    box-shadow: 0 0 6px rgba(255, 255, 255, 0.2);
+}
+
+/* 额外的小气泡 */
+.order-section::before {
+    content: '';
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.5) 0%, transparent 100%);
+    border-radius: 50%;
+    bottom: -10px;
+    right: 20%;
+    animation: bubble-small 4s ease-in-out infinite;
+}
+
+.order-section::after {
+    content: '';
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.4) 0%, transparent 100%);
+    border-radius: 50%;
+    bottom: -8px;
+    left: 15%;
+    animation: bubble-small 3s ease-in-out infinite;
+    animation-delay: 1.5s;
+}
+
+@keyframes bubble-rise {
+    0% {
+        opacity: 0;
+        transform: translateY(0) scale(0.3);
+    }
+    5% {
+        opacity: 1;
+    }
+    85% {
+        opacity: 0.6;
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-120px) scale(1.5);
+    }
+}
+
+@keyframes bubble-small {
+    0% {
+        opacity: 0;
+        transform: translateY(0);
+    }
+    10% {
+        opacity: 1;
+    }
+    80% {
+        opacity: 0.4;
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-80px);
+    }
+}
+
+.tracker-icon {
+    font-size: 52px;
+    margin-bottom: 8px;
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
+    position: relative;
+    z-index: 1;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+.tracker-label {
+    color: var(--text-primary);
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    position: relative;
+    z-index: 1;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.records-section {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+    padding: 20px 18px;
+    box-shadow: 0 8px 32px var(--glass-shadow);
+    margin: 0 5px;
+    position: relative;
+    overflow: hidden;
+}
+
+.records-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+}
+
+.records-section h2 {
+    font-size: 18px;
+    color: var(--text-primary);
+    margin-bottom: 16px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.records-section h2::before {
+    content: '';
+    width: 4px;
+    height: 18px;
+    background: var(--primary-gradient);
+    border-radius: 2px;
+}
+
+.records-list {
+    list-style: none;
+    max-height: 280px;
+    overflow-y: auto;
+    padding-right: 5px;
+}
+
+.records-list::-webkit-scrollbar {
+    width: 4px;
+}
+
+.records-list::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 2px;
+}
+
+.records-list::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 2px;
+}
+
+.records-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 12px;
+    margin-bottom: 8px;
+    font-size: 15px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 14px;
+    transition: all 0.3s ease;
+}
+
+.records-list li:hover {
+    background: rgba(255, 255, 255, 0.12);
+    transform: translateX(4px);
+}
+
+.records-list li:last-child {
+    margin-bottom: 0;
+}
+
+.record-time {
+    color: var(--text-primary);
+    font-weight: 400;
+    font-family: 'SF Mono', 'Monaco', 'Inconsolata', monospace;
+    font-size: 14px;
+}
+
+.record-index {
+    background: var(--primary-gradient);
+    color: white;
+    min-width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(0, 198, 251, 0.4);
+}
+
+.empty-message {
+    color: var(--text-secondary);
+    text-align: center;
+    padding: 40px 20px;
+    font-style: italic;
+    font-size: 14px;
+    opacity: 0.7;
+}
+
+/* Ripple effect for touch */
+.ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.4);
+    transform: scale(0);
+    animation: ripple 0.6s linear;
+    pointer-events: none;
+}
+
+@keyframes ripple {
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+
+/* Decorative floating elements */
+.floating-orb {
+    position: fixed;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    z-index: 0;
+    animation: float-orb 15s ease-in-out infinite;
+}
+
+.floating-orb:nth-child(1) {
+    top: 20%;
+    left: 5%;
+    width: 40px;
+    height: 40px;
+    animation-delay: 0s;
+}
+
+.floating-orb:nth-child(2) {
+    top: 60%;
+    right: 8%;
+    width: 50px;
+    height: 50px;
+    animation-delay: -5s;
+}
+
+.floating-orb:nth-child(3) {
+    bottom: 15%;
+    left: 15%;
+    width: 35px;
+    height: 35px;
+    animation-delay: -10s;
+}
+
+@keyframes float-orb {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    25% { transform: translateY(-20px) rotate(90deg); }
+    50% { transform: translateY(0) rotate(180deg); }
+    75% { transform: translateY(20px) rotate(270deg); }
+}
+
+/* Safe area padding for notched devices */
+@supports (padding: max(0px)) {
+    .header {
+        padding-top: max(25px, env(safe-area-inset-top));
+    }
+}
